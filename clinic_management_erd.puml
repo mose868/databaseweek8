@@ -1,0 +1,86 @@
+@startuml
+left to right direction
+
+' Core Entities
+entity "Patients" as Patients {
+  *patient_id : INT
+  first_name
+  last_name
+}
+entity "Doctors" as Doctors {
+  *doctor_id : INT
+  first_name
+  last_name
+}
+entity "Staff" as Staff {
+  *staff_id : INT
+  first_name
+  last_name
+}
+
+' Appointments & Schedules
+entity "Appointments" as Appointments {
+  *appointment_id : INT
+  patient_id
+  doctor_id
+}
+entity "DoctorSchedules" as DoctorSchedules {
+  *schedule_id : INT
+  doctor_id
+}
+
+' Medical Records & Related
+entity "MedicalRecords" as MedicalRecords {
+  *record_id : INT
+  patient_id
+  appointment_id
+}
+entity "Diagnoses" as Diagnoses {
+  *diagnosis_id : INT
+  record_id
+}
+entity "Prescriptions" as Prescriptions {
+  *prescription_id : INT
+  record_id
+  doctor_id
+  medication_id
+}
+entity "Medications" as Medications {
+  *medication_id : INT
+  name
+}
+entity "LabTests" as LabTests {
+  *test_id : INT
+  patient_id
+  doctor_id
+}
+
+' Billing & Insurance
+entity "Billing" as Billing {
+  *bill_id : INT
+  patient_id
+  insurance_id
+  appointment_id
+}
+entity "InsuranceProviders" as InsuranceProviders {
+  *insurance_id : INT
+  provider_name
+}
+
+' Relationships (ordered to minimize crossings)
+Patients --{ Appointments
+Doctors --{ Appointments
+Doctors --{ DoctorSchedules
+Patients --{ MedicalRecords
+Appointments -- MedicalRecords
+MedicalRecords --{ Diagnoses
+MedicalRecords --{ Prescriptions
+Doctors --{ Prescriptions
+Medications --{ Prescriptions
+Patients --{ Billing
+InsuranceProviders --{ Billing
+Appointments --{ Billing
+Patients --{ LabTests
+Doctors --{ LabTests
+
+@enduml 

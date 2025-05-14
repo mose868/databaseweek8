@@ -1,0 +1,115 @@
+Table Patients {
+  patient_id int [pk, increment]
+  first_name varchar(50)
+  last_name varchar(50)
+  date_of_birth date
+  gender varchar(10)
+  phone varchar(20)
+  email varchar(100)
+  address text
+  insurance_id int
+  registration_date datetime
+}
+
+Table Doctors {
+  doctor_id int [pk, increment]
+  first_name varchar(50)
+  last_name varchar(50)
+  specialization varchar(100)
+  phone varchar(20)
+  email varchar(100)
+  hire_date date
+  is_active boolean
+}
+
+Table Appointments {
+  appointment_id int [pk, increment]
+  patient_id int [ref: > Patients.patient_id]
+  doctor_id int [ref: > Doctors.doctor_id]
+  appointment_date datetime
+  status varchar(20)
+  reason text
+}
+
+Table MedicalRecords {
+  record_id int [pk, increment]
+  patient_id int [ref: > Patients.patient_id]
+  appointment_id int [unique, ref: > Appointments.appointment_id]
+  height decimal(5,2)
+  weight decimal(5,2)
+  blood_type varchar(5)
+  allergies text
+}
+
+Table Diagnoses {
+  diagnosis_id int [pk, increment]
+  record_id int [ref: > MedicalRecords.record_id]
+  condition_name varchar(100)
+  description text
+  diagnosis_date date
+}
+
+Table Medications {
+  medication_id int [pk, increment]
+  name varchar(100)
+  manufacturer varchar(100)
+  dosage_form varchar(20)
+  stock_quantity int
+}
+
+Table Prescriptions {
+  prescription_id int [pk, increment]
+  record_id int [ref: > MedicalRecords.record_id]
+  doctor_id int [ref: > Doctors.doctor_id]
+  medication_id int [ref: > Medications.medication_id]
+  dosage varchar(50)
+  frequency varchar(50)
+  start_date date
+  end_date date
+}
+
+Table InsuranceProviders {
+  insurance_id int [pk, increment]
+  provider_name varchar(100)
+  policy_number varchar(50)
+  coverage_details text
+}
+
+Table Billing {
+  bill_id int [pk, increment]
+  patient_id int [ref: > Patients.patient_id]
+  insurance_id int [ref: > InsuranceProviders.insurance_id]
+  appointment_id int [ref: > Appointments.appointment_id]
+  total_amount decimal(10,2)
+  payment_status varchar(20)
+  due_date date
+}
+
+Table DoctorSchedules {
+  schedule_id int [pk, increment]
+  doctor_id int [ref: > Doctors.doctor_id]
+  day_of_week varchar(20)
+  start_time time
+  end_time time
+  is_available boolean
+}
+
+Table Staff {
+  staff_id int [pk, increment]
+  first_name varchar(50)
+  last_name varchar(50)
+  role varchar(30)
+  phone varchar(20)
+  email varchar(100)
+  hire_date date
+}
+
+Table LabTests {
+  test_id int [pk, increment]
+  patient_id int [ref: > Patients.patient_id]
+  doctor_id int [ref: > Doctors.doctor_id]
+  test_name varchar(100)
+  test_date date
+  results text
+  status varchar(20)
+} 
